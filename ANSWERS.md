@@ -20,15 +20,18 @@ A thread is a smaller unit of execution that resides within a process and shares
 
 **Your Answer:**
 
-A process is pushed back to the end of the ready queue in Round-Robin scheduling if it does not complete within the allotted time quantum. This ensures fairness by giving other processes an opportunity to run. A thread in the program gets re-added to the queue and waits for its next turn when it completes its time slice but still has time left. No process will be able to monopolize the CPU thanks to this behavior.
+A process is pushed back to the end of the ready queue in Round-Robin scheduling if it does not complete within the allotted time quantum. By letting each process use the CPU in turn, this guarantees equity for all. It is evident from the program output that processes that fail to finish their execution are queued up and run again at a later time.
+
 Example from my output:
 
-P1 added to ready queue
-P1 executing...
-P1 not finished, re-queued
+▶ P2 executing quantum [4000ms]
+⚡ Quantum progress: [███████████████] 100%
+⏸ P2 completed quantum 4000ms │ Overall progress: [█████████░░░░░░░░░░░] 46%
+   Remaining time: 4676ms
+↻ P2 yields CPU for context switch
 
 **Explanation of example:**
-In this instance, process P1 was moved back to the end of the queue since it failed to finish its burst period within one quantum. It will then be chosen once more and carried out. This illustrates how Round-Robin scheduling equitably cycles through processes.
+In this instance, process P2 ran for one full time quantum (4000 ms), however it didn't finish because 4676 ms remained. As a result, it returns to the ready queue after yielding the CPU. It will be rescheduled once other processes have had a chance. This illustrates how Round-Robin scheduling guarantees equity and keeps the CPU from being monopolized by any one operation.
 ---
 
 ## Question 3: Thread States
@@ -37,18 +40,24 @@ In this instance, process P1 was moved back to the end of the queue since it fai
 
 **Your Answer:**
 
-Throughout its lifetime, a thread goes through a number of states. The states of process P1 in this simulation can be traced as follows:
+Throughout its lifetime, a thread goes through a number of states. The real program output in this simulation allows us to track the states of process P2.
 
 
-1. **New**: When the Process object is initialized but has not yet begun to execute, a thread is generated.
+1. **New**: When the process is initialized and ready to enter the system before execution starts, a thread is generated.
 
-2. **Runnable**: The thread is prepared to execute when it is added to the ready queue and the start() method is invoked.
 
-3. **Running**: When the scheduler chooses a thread and starts utilizing CPU time to execute it, the thread enters the running state.
+2. **Runnable**: When the thread is prepared for scheduling and is awaiting CPU time in the ready queue, it becomes runnable.
 
-4. **Waiting**: When a thread is suspended using techniques like sleep(), it may go into a waiting state so that other threads can run.
 
-5. **Terminated**: When the thread's execution is complete and its remaining time is zero, it enters this state.
+3. **Running**: When the thread is chosen by the scheduler, it goes into the running state: ▶  P2 executing quantum [4000ms]
+
+
+
+4. **Waiting**: The thread releases the CPU after finishing its quantum but not its execution: ↻ P2 yields CPU for context switch                                       At this point, it waits for its next turn in the ready queue.
+
+
+
+5. **Terminated**:The thread completes its execution and leaves the system when the remaining time is zero (this shows up later in the output after the process is finished).
 
 ---
 
